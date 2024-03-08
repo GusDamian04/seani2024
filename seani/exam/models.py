@@ -37,6 +37,17 @@ class Exam(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name = "Fecha de creación")
     update = models.DateTimeField(auto_now=True, verbose_name = "Fecha de actualización")
 
+    def set_modules(self):
+        for module in Module.objects.all():
+            self.modules.add(module)
+    def set_questions(self):
+        for module in self.modules.all():
+            for question in module.question_set.all():
+                Breakdow.objects.create(exam = self,
+                        question = question,
+                        correct = question.correct
+                        )
+
     def __str__(self):
         return f"{ self.user } - { self.career } - { self.score }"
 
